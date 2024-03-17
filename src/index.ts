@@ -25,8 +25,6 @@ const employee: Employee[] = [
         'cedula': "001-1432464-9",
         'fullname': "Dayhan Garcia",
         'pricePerHour': 20000,
-
-
     }
 
 ];
@@ -107,18 +105,30 @@ app.get('/employee/:id/salary', (req: Request, res: Response) => {
         });
     }
 
-    const horas = workedHours.filter((x) => x.employeeId === id);
-    let totalHoras = 0;
-    workedHours.forEach(i => totalHoras += i.hours);
+    const horas = workedHours.find((x) => x.employeeId === id);
+    if (!horas) {
+        return res.status(404).json({
+            statusCode: 404,
+            statusValue: 'Not Found',
+            message: `No se encontraron horas trabajadas para el empleado con ID: ${id}`
+        });
+    }
+    const totalHoras = horas.hours;
 
-    const money = employee.filter((x) => x.id === id);
-    let loCualto = 0;
-    employee.forEach(i => loCualto += i.pricePerHour);
+    const money = employee.find((x) => x.id === id);
+    if (!money) {
+        return res.status(404).json({
+            statusCode: 404,
+            statusValue: 'Not Found',
+            message: `No se encontró información del empleado con ID: ${id}`
+        });
+    }
+    const precioPorHora = money.pricePerHour;
 
-    let salario = totalHoras * loCualto;
+    const salario = totalHoras * precioPorHora;
     res.json({
-        employee,
-        salario
+        employee: money,
+        salario: salario
     })
 
 })
