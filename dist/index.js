@@ -17,7 +17,6 @@ const employee = [
         'pricePerHour': 20000,
     }
 ];
-
 const workedHours = [
     {
         'employeeId': 1,
